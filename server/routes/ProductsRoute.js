@@ -8,13 +8,19 @@ import {
   softDeleteProduct,
   updateProduct,
 } from "../controllers/ProductController.js";
+import { authorizeRoles, verifyToken } from "../middleware/authMiddleware.js";
 
 const ProductRoute = express.Router();
-ProductRoute.post("/", addProduct);
-ProductRoute.delete("/", deleteProduct);
+ProductRoute.post("/", verifyToken, authorizeRoles("admin"), addProduct);
+ProductRoute.delete("/", verifyToken, authorizeRoles("admin"), deleteProduct);
 ProductRoute.get("/", getAllProducts);
 ProductRoute.get("/:id", getSingleProduct);
-ProductRoute.put("/:id", updateProduct);
-ProductRoute.put("/:id", softDeleteProduct);
+ProductRoute.put("/:id", verifyToken, authorizeRoles("admin"), updateProduct);
+ProductRoute.put(
+  "/:id",
+  verifyToken,
+  authorizeRoles("admin"),
+  softDeleteProduct
+);
 ProductRoute.get("/category/:categoryId", getProductsByCategoryId);
 export default ProductRoute;
