@@ -2,8 +2,10 @@ import dotenv from "dotenv";
 import db from "./config/db.js";
 import express from "express";
 import cookieParser from "cookie-parser";
-import cors from "cors"
+import cors from "cors";
 import UserRoute from "./routes/UserRoute.js";
+import ProductRoute from "./routes/ProductsRoute.js";
+import CategoryRoute from "./routes/CategoryRoute.js";
 
 dotenv.config();
 
@@ -17,7 +19,9 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
-app.use("/auth", UserRoute)
+app.use("/auth", UserRoute);
+app.use("/products", ProductRoute);
+app.use("/categories", CategoryRoute);
 
 app.listen(port, () => {
   console.log(`API IS RUNNING ON PORT: ${port}`);
