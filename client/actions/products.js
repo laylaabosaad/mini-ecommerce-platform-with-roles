@@ -12,7 +12,9 @@ export const addProduct = async (prevState, formData) => {
     inventoryQuantity: parseInt(formData.get("inventoryQuantity")),
   };
   try {
-    const res = await axios.post(`${BASE_URL}/products`, data);
+    const res = await axios.post(`${BASE_URL}/products`, data, {
+      withCredentials: true,
+    });
 
     return {
       success: true,
@@ -20,10 +22,11 @@ export const addProduct = async (prevState, formData) => {
       data: res.data.data,
     };
   } catch (error) {
+    console.log("error?.response?.data?.message", error?.response.data.message);
     return {
       success: false,
-      message: error?.response?.data?.error || "Failed to add product",
-      fieldData: data, 
+      message: error?.response?.data?.message || "Failed to add product",
+      fieldData: data,
     };
   }
 };
@@ -43,11 +46,10 @@ export const fetchAllProducts = async (page = 1, limit = 10) => {
   } catch (error) {
     return {
       success: false,
-      message: error?.response?.data?.error || "Failed to fetch products",
+      message: error?.response?.data?.message || "Failed to fetch products",
     };
   }
 };
-
 
 export const fetchSingleProduct = async (id) => {
   try {
@@ -62,7 +64,7 @@ export const fetchSingleProduct = async (id) => {
     console.error("Error fetching single product:", error);
     return {
       success: false,
-      message: error?.response?.data?.error || "Failed to fetch product",
+      message: error?.response?.data?.message || "Failed to fetch product",
     };
   }
 };
@@ -79,7 +81,9 @@ export const editProduct = async (prevState, formData, id) => {
   };
 
   try {
-    const res = await axios.put(`${BASE_URL}/products/${id}`, data);
+    const res = await axios.put(`${BASE_URL}/products/${id}`, data, {
+      withCredentials: true,
+    });
 
     return {
       success: true,
@@ -89,9 +93,11 @@ export const editProduct = async (prevState, formData, id) => {
   } catch (error) {
     return {
       success: false,
-      message: error?.response?.data?.message || error?.response?.data?.error || "Failed to update product",
-      fieldData: data, 
+      message:
+        error?.response?.data?.message ||
+        error?.response?.data?.message ||
+        "Failed to update product",
+      fieldData: data,
     };
   }
 };
-
