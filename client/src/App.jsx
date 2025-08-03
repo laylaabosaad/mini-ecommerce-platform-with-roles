@@ -3,9 +3,10 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Login from "../auth/Login";
 import Register from "../auth/Register";
-import Navbar from "./components/Navbar";
 import PublicOnlyRoute from "../context/PublicOnlyRoute";
 import Home from "./pages/Home";
+import SingleProduct from "./pages/SingleProduct";
+import Navbar from "./components/Navbar/Navbar";
 
 function App() {
   return (
@@ -30,6 +31,8 @@ function App() {
             </PublicOnlyRoute>
           }
         />
+
+        <Route path="/products/:id" element={<SingleProduct />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </>
