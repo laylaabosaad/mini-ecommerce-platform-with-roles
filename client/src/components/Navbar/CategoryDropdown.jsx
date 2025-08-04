@@ -25,7 +25,7 @@ function CategoryDropdown({ categories, role, closeMenu, onCategoryAdded }) {
             {categories.map((category) => (
               <Link
                 key={category._id}
-                to={`/category/${category._id}`}
+                to={`/products/category/${category._id}`}
                 onClick={closeMenu}
                 className="px-4 py-2 hover:bg-slate-700"
               >

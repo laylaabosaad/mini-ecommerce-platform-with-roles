@@ -7,6 +7,8 @@ import PublicOnlyRoute from "../context/PublicOnlyRoute";
 import Home from "./pages/Home";
 import SingleProduct from "./pages/SingleProduct";
 import Navbar from "./components/Navbar/Navbar";
+import ProductsPerCategory from "./pages/ProductsPerCategory";
+import Stats from "../dashboard/stats/Stats";
 
 function App() {
   return (
@@ -33,7 +35,9 @@ function App() {
         />
 
         <Route path="/products/:id" element={<SingleProduct />} />
+         <Route path="/products/category/:categoryId" element={<ProductsPerCategory />} />
         <Route path="/" element={<Home />} />
+         <Route path="/dashboard" element={<Stats />} />
       </Routes>
     </>
   );
