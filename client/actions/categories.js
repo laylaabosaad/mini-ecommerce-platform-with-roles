@@ -8,7 +8,6 @@ export async function getCategories(setCategories) {
     if (setCategories) {
       setCategories(categories);
     }
-    console.log("res.data for categories", res.data);
     return {
       success: true,
       message: res.data?.message || "Categories fetched successfully",

@@ -101,3 +101,33 @@ export const editProduct = async (prevState, formData, id) => {
     };
   }
 };
+
+export const fetchProductsByCategory = async (
+  categoryId,
+  page = 1,
+  limit = 10
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/products/category/${categoryId}`,
+      {
+        params: { page, limit },
+      }
+    );
+    console.log("response.data", response.data.categoryName);
+    return {
+      success: true,
+      message: response.data.message,
+      data: response.data.data,
+      pagination: response.data.pagination,
+      categoryName: response.data.categoryName,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error?.response?.data?.message ||
+        "Failed to fetch products by category",
+    };
+  }
+};
