@@ -6,6 +6,7 @@ import cors from "cors";
 import UserRoute from "./routes/UserRoute.js";
 import ProductRoute from "./routes/ProductsRoute.js";
 import CategoryRoute from "./routes/CategoryRoute.js";
+import StatsRoute from "./routes/StatsRoute.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use("/auth", UserRoute);
 app.use("/products", ProductRoute);
 app.use("/categories", CategoryRoute);
+app.use("/stats", StatsRoute);
 
 app.listen(port, () => {
   console.log(`API IS RUNNING ON PORT: ${port}`);

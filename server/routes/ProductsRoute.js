@@ -23,4 +23,5 @@ ProductRoute.put(
   softDeleteProduct
 );
 ProductRoute.get("/category/:categoryId", getProductsByCategoryId);
+
 export default ProductRoute;
