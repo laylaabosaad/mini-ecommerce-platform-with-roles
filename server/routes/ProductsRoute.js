@@ -17,7 +17,7 @@ ProductRoute.get("/", getAllProducts);
 ProductRoute.get("/:id", getSingleProduct);
 ProductRoute.put("/:id", verifyToken, authorizeRoles("admin"), updateProduct);
 ProductRoute.put(
-  "/:id",
+  "/soft-delete/:id",
   verifyToken,
   authorizeRoles("admin"),
   softDeleteProduct

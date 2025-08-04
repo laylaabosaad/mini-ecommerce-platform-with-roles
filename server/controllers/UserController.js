@@ -35,7 +35,6 @@ export async function register(req, res) {
       message: "User successfully created",
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: "User not successfully created. Please try again later",
       details: error.message,
@@ -56,7 +55,6 @@ export async function tokenCreation(res, id, name, email, role) {
     });
     return token;
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: "Error creating token",
       details: error.message,
@@ -94,7 +92,6 @@ export async function login(req, res) {
       token: token,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: "User not logged in. Please try again later",
       details: error.message,

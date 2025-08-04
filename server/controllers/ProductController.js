@@ -110,9 +110,11 @@ export async function getAllProducts(req, res) {
     const limit = 10;
     const skip = (page - 1) * limit;
 
+    const filter = { isDeleted: false };
+
     const [products, totalProducts] = await Promise.all([
-      ProductModel.find().skip(skip).limit(limit).lean(),
-      ProductModel.countDocuments(),
+      ProductModel.find(filter).skip(skip).limit(limit).lean(),
+      ProductModel.countDocuments(filter),
     ]);
 
     const totalPages = Math.ceil(totalProducts / limit);
@@ -199,12 +201,15 @@ export async function getProductsByCategoryId(req, res) {
     if (!categoryId) {
       return res.status(400).json({ error: "Category ID is required" });
     }
+
+    const filter = { category: categoryId, isDeleted: false };
+
     const [products, totalProducts, category] = await Promise.all([
-      ProductModel.find({ category: categoryId })
+      ProductModel.find(filter)
         .skip(skip)
         .limit(limit)
         .lean(),
-      ProductModel.countDocuments({ category: categoryId }),
+      ProductModel.countDocuments(filter),
       CategoryModel.findById(categoryId).lean(),
     ]);
 
@@ -233,10 +238,11 @@ export async function getProductsByCategoryId(req, res) {
 }
 
 
-
 export async function getDashboardStats(req, res) {
   try {
-    const totalProducts = await ProductModel.countDocuments({ isDeleted: false });
+    const totalProducts = await ProductModel.countDocuments({
+      isDeleted: false,
+    });
     const totalCategories = await CategoryModel.countDocuments();
     const inventoryStats = await ProductModel.aggregate([
       { $match: { isDeleted: false } },
@@ -247,7 +253,8 @@ export async function getDashboardStats(req, res) {
         },
       },
     ]);
-    const totalInventory = inventoryStats.length > 0 ? inventoryStats[0].totalInventory : 0;
+    const totalInventory =
+      inventoryStats.length > 0 ? inventoryStats[0].totalInventory : 0;
     return res.status(200).json({
       totalProducts,
       totalCategories,
@@ -260,4 +267,3 @@ export async function getDashboardStats(req, res) {
     });
   }
 }
-

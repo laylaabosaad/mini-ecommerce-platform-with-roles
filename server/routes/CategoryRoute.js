@@ -7,6 +7,6 @@ import {
 import { authorizeRoles, verifyToken } from "../middleware/authMiddleware.js";
 const CategoryRoute = express.Router();
 CategoryRoute.get("/", getAllCategories);
-CategoryRoute.delete("/:id", verifyToken, authorizeRoles("admin"), deleteCategory);
+CategoryRoute.delete("/:categoryId",deleteCategory);
 CategoryRoute.post("/", verifyToken, authorizeRoles("admin"), addCategory);
 export default CategoryRoute;

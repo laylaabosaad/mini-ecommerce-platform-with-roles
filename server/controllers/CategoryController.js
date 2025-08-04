@@ -30,30 +30,34 @@ export async function addCategory(req, res) {
 
 export async function deleteCategory(req, res) {
   try {
-    const categoryId = req.body.id;
+    const { categoryId } = req.params;
 
     if (!categoryId) {
-      return res.status(400).json({ message: "Category ID is required" });
+      return res.status(400).json({ success: false, message: "Category ID is required" });
     }
 
-    const selectedCategory = await CategoryModel.findByIdAndDelete(categoryId);
+    const deletedCategory = await CategoryModel.findByIdAndDelete(categoryId);
 
-    if (!selectedCategory) {
+    if (!deletedCategory) {
       return res.status(404).json({
+        success: false,
         message: "Category not found",
       });
     }
 
     return res.status(200).json({
+      success: true,
       message: "Category deleted successfully",
     });
   } catch (error) {
     return res.status(500).json({
-      error: "Failed to delete category",
-      details: error.message,
+      success: false,
+      message: "Failed to delete category",
+      error: error.message,
     });
   }
 }
+
 
 export async function getAllCategories(req, res) {
   try {
@@ -72,4 +76,3 @@ export async function getAllCategories(req, res) {
     });
   }
 }
-
