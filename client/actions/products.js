@@ -1,7 +1,7 @@
 import axios from "axios";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const addProduct = async (prevState, formData) => {
+export async function addProduct(prevState, formData){
   const data = {
     name: formData.get("name"),
     author: formData.get("author"),
@@ -31,7 +31,7 @@ export const addProduct = async (prevState, formData) => {
   }
 };
 
-export const fetchAllProducts = async (page = 1, limit = 10) => {
+export async function fetchAllProducts (page = 1, limit = 10){
   try {
     const response = await axios.get(`${BASE_URL}/products`, {
       params: { page, limit },
@@ -51,7 +51,7 @@ export const fetchAllProducts = async (page = 1, limit = 10) => {
   }
 };
 
-export const fetchSingleProduct = async (id) => {
+export async function fetchSingleProduct(id){
   try {
     const { data } = await axios.get(`${BASE_URL}/products/${id}`);
 
@@ -69,7 +69,7 @@ export const fetchSingleProduct = async (id) => {
   }
 };
 
-export const editProduct = async (prevState, formData, id) => {
+export async function editProduct(prevState, formData, id){
   const data = {
     name: formData.get("name"),
     author: formData.get("author"),
@@ -102,11 +102,11 @@ export const editProduct = async (prevState, formData, id) => {
   }
 };
 
-export const fetchProductsByCategory = async (
+export async function fetchProductsByCategory(
   categoryId,
   page = 1,
   limit = 10
-) => {
+){
   try {
     const response = await axios.get(
       `${BASE_URL}/products/category/${categoryId}`,
