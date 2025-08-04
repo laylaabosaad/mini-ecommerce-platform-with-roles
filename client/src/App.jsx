@@ -9,6 +9,8 @@ import SingleProduct from "./pages/SingleProduct";
 import Navbar from "./components/Navbar/Navbar";
 import ProductsPerCategory from "./pages/ProductsPerCategory";
 import Stats from "../dashboard/stats/Stats";
+import Footer from "./components/Footer";
+import ProtectedRoutes from "../context/ProtectedRoutes";
 
 function App() {
   return (
@@ -35,10 +37,21 @@ function App() {
         />
 
         <Route path="/products/:id" element={<SingleProduct />} />
-         <Route path="/products/category/:categoryId" element={<ProductsPerCategory />} />
+        <Route
+          path="/products/category/:categoryId"
+          element={<ProductsPerCategory />}
+        />
         <Route path="/" element={<Home />} />
-         <Route path="/dashboard" element={<Stats />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoutes roles={["admin"]}>
+              <Stats />
+            </ProtectedRoutes>
+          }
+        />
       </Routes>
+      <Footer />
     </>
   );
 }
