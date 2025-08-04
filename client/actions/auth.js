@@ -10,7 +10,6 @@ export async function register(prevState, formData) {
     confirmPassword: formData.get("confirmPassword"),
     role: formData.get("role"),
   };
-  console.log("data", data);
   try {
     const res = await axios.post(`${BASE_URL}/auth/register`, data);
     if (res.status !== 200 && res.status !== 201) {
@@ -31,7 +30,6 @@ export async function login(prevState, formData) {
     email: formData.get("email"),
     password: formData.get("password"),
   };
-  console.log("data", data);
   try {
     const res = await axios.post(`${BASE_URL}/auth/login`, data, {
       withCredentials: true,
