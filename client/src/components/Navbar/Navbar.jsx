@@ -6,6 +6,7 @@ import { UserContext } from "../../../context/UserContext";
 import { getCategories } from "../../../actions/categories";
 import AuthLinks from "./AuthLinks";
 import CategoryDropdown from "./CategoryDropdown";
+import SearchBar from "../SearchBar/SearchBar";
 
 function Navbar() {
   const location = useLocation();
@@ -86,8 +87,9 @@ function Navbar() {
   return (
     <nav>
       <Link to="/" className="text-xl font-bold">
-        Logo
+        Mini-Book
       </Link>
+      <SearchBar />
 
       <div className="hidden md:flex space-x-6 items-center">
         {renderNavLinks()}
@@ -102,7 +104,7 @@ function Navbar() {
       </button>
 
       {menuOpen && (
-        <div className="absolute top-full left-0 w-full bg-white flex flex-col gap-4 py-4 px-6 md:hidden shadow-md z-10">
+        <div className="absolute top-28 left-0 w-full bg-slate-600 flex flex-col gap-4 py-4 px-6 md:hidden shadow-md z-10">
           {renderNavLinks()}
         </div>
       )}

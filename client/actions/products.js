@@ -153,3 +153,24 @@ export async function softDeleteProduct(id) {
     };
   }
 }
+
+export async function searchByName(name) {
+  try {
+    const res = await axios.get(`${BASE_URL}/products/search?searchedName=${name}`, {
+      withCredentials: true,
+    });
+
+    if (res.status === 200) {
+      return { success: true, data: res.data.data, message: res.data.message };
+    } else {
+      return { success: false, message: res.data?.message || "Failed" };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error?.response?.data?.message || "Error searching",
+    };
+  }
+}
+
+
