@@ -1,3 +1,4 @@
+import CategoryModel from "../models/Categories.js";
 import ProductModel from "../models/Products.js";
 
 export async function addProduct(req, res) {
@@ -191,20 +192,37 @@ export async function updateProduct(req, res) {
 export async function getProductsByCategoryId(req, res) {
   try {
     const { categoryId } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
 
     if (!categoryId) {
       return res.status(400).json({ error: "Category ID is required" });
     }
+    const [products, totalProducts, category] = await Promise.all([
+      ProductModel.find({ category: categoryId })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      ProductModel.countDocuments({ category: categoryId }),
+      CategoryModel.findById(categoryId).lean(),
+    ]);
 
-    const products = await ProductModel.find({ category: categoryId }).lean();
-
-    if (products.length === 0) {
-      return res.status(404).json({ message: "No products found for this category" });
-    }
+    const totalPages = Math.ceil(totalProducts / limit);
+    const categoryName = category ? category.title : null;
 
     return res.status(200).json({
-      message: "Products fetched successfully",
+      message: products.length
+        ? "Products fetched successfully"
+        : "No products found for this category",
       data: products,
+      categoryName,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalProducts,
+        limit,
+      },
     });
   } catch (error) {
     return res.status(500).json({
@@ -213,3 +231,33 @@ export async function getProductsByCategoryId(req, res) {
     });
   }
 }
+
+
+
+export async function getDashboardStats(req, res) {
+  try {
+    const totalProducts = await ProductModel.countDocuments({ isDeleted: false });
+    const totalCategories = await CategoryModel.countDocuments();
+    const inventoryStats = await ProductModel.aggregate([
+      { $match: { isDeleted: false } },
+      {
+        $group: {
+          _id: null,
+          totalInventory: { $sum: "$inventoryQuantity" },
+        },
+      },
+    ]);
+    const totalInventory = inventoryStats.length > 0 ? inventoryStats[0].totalInventory : 0;
+    return res.status(200).json({
+      totalProducts,
+      totalCategories,
+      totalInventory,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: "Failed to retrieve dashboard stats",
+      details: error.message,
+    });
+  }
+}
+
