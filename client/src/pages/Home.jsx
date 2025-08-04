@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
-
 import { fetchAllProducts } from "../../actions/products";
 import ProductsCard from "../components/Products/ProductsCard";
 import AddProducts from "../../dashboard/products/AddProducts";
+import Pagination from "../components/Products/Pagination";
 
 function Home() {
   const { role } = useContext(UserContext);
@@ -49,7 +49,10 @@ function Home() {
         )}
       </div>
 
-      <div className="flex w-full min-h-screen lg:justify-start justify-center flex-wrap gap-6">
+      <div
+        style={{ minHeight: "500px" }}
+        className="flex w-full min-h-screen lg:justify-start justify-center flex-wrap gap-6"
+      >
         {loading ? (
           <p>Loading products...</p>
         ) : products.length > 0 ? (
@@ -68,26 +71,12 @@ function Home() {
         )}
       </div>
 
-      {/* Pagination Controls */}
-      <div className="flex justify-center items-center gap-4 mt-6">
-        <button
-          onClick={handlePrev}
-          disabled={currentPage === 1}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-        >
-          Previous
-        </button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={handleNext}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPrev={handlePrev}
+        onNext={handleNext}
+      />
 
       {showModal && (
         <AddProducts
