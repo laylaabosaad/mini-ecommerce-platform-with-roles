@@ -4,6 +4,7 @@ import { fetchAllProducts } from "../../actions/products";
 import ProductsCard from "../components/Products/ProductsCard";
 import AddProducts from "../../dashboard/products/AddProducts";
 import Pagination from "../components/Products/Pagination";
+import SuccessPopup from "../components/PopUp/SuccessPopup";
 
 function Home() {
   const { role } = useContext(UserContext);
@@ -12,6 +13,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [deletedProductTitle, setDeletedProductTitle] = useState(null);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -36,6 +38,9 @@ function Home() {
 
   const handleNext = () => {
     if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+  };
+  const closeSuccessPopup = () => {
+    setDeletedProductTitle(null);
   };
 
   return (
@@ -64,6 +69,10 @@ function Home() {
               author={product.author}
               img={product.imageUrl}
               id={product._id}
+              onDeleted={(deletedId, deletedTitle) => {
+                setDeletedProductTitle(deletedTitle);
+                setProducts((prev) => prev.filter((p) => p._id !== deletedId));
+              }}
             />
           ))
         ) : (
@@ -84,6 +93,12 @@ function Home() {
           onProductAdded={(newProduct) =>
             setProducts((prev) => [...prev, newProduct])
           }
+        />
+      )}
+      {deletedProductTitle && (
+        <SuccessPopup
+          title={deletedProductTitle}
+          onCancel={closeSuccessPopup}
         />
       )}
     </div>

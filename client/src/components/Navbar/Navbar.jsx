@@ -13,6 +13,7 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { role, authenticated, refreshUser } = useContext(UserContext);
   const [categories, setCategories] = useState([]);
+  const [categoryMessage, setCategoryMessage] = useState("");
 
   const getLinkClass = (path) =>
     location.pathname === path ? "nav-link-active" : "nav-link";
@@ -30,7 +31,17 @@ function Navbar() {
   };
 
   useEffect(() => {
-    getCategories(setCategories);
+    async function fetchCategories() {
+      const result = await getCategories();
+      if (result.success) {
+        setCategories(result.data);
+        setCategoryMessage(result.message);
+      } else {
+        setCategories([]);
+        setCategoryMessage(result.message || "Failed to fetch categories");
+      }
+    }
+    fetchCategories();
   }, []);
 
   const renderNavLinks = () => (
@@ -45,16 +56,20 @@ function Navbar() {
 
       <CategoryDropdown
         categories={categories}
+        message={categoryMessage}
         role={role}
         closeMenu={() => setMenuOpen(false)}
         onCategoryAdded={(newCat) =>
           setCategories((prev) => {
             if (prev.some((cat) => cat._id === newCat._id)) {
-              return prev; // Prevent duplicates
+              return prev;
             }
             return [...prev, newCat];
           })
         }
+        onCategoryDeleted={(deletedId) => {
+          setCategories((prev) => prev.filter((cat) => cat._id !== deletedId));
+        }}
       />
 
       <AuthLinks

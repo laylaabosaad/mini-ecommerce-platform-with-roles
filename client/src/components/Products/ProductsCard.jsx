@@ -2,26 +2,39 @@ import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import EditProducts from "../../../dashboard/products/EditProducts";
 import { UserContext } from "../../../context/UserContext";
+import DeletePopup from "../PopUp/DeletePopup";
+import { softDeleteProduct } from "../../../actions/products";
 
-function ProductsCard({ title, price, author, img, id }) {
+function ProductsCard({ title, price, author, img, id, onDeleted }) {
   const [showEdit, setShowEdit] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
   const [productData, setProductData] = useState({ title, price, author, img });
   const { role } = useContext(UserContext);
 
-  // Update local product data when props change (optional, if props can change)
   useEffect(() => {
     setProductData({ title, price, author, img });
   }, [title, price, author, img]);
 
-  // Handler for updated product from EditProducts popup
   const handleProductUpdate = (updatedProduct) => {
     setProductData({
-      title: updatedProduct.name, // assuming API returns 'name' for title
+      title: updatedProduct.name,
       price: updatedProduct.price,
       author: updatedProduct.author,
       img: updatedProduct.imageUrl,
     });
     setShowEdit(false);
+  };
+
+  const handleDelete = async () => {
+    const result = await softDeleteProduct(id);
+    if (result.success) {
+      setShowDeletePopup(false);
+      setDeleteError("");
+      if (onDeleted) onDeleted(id, productData.title);
+    } else {
+      setDeleteError(result.message || "Failed to delete product");
+    }
   };
 
   return (
@@ -46,11 +59,10 @@ function ProductsCard({ title, price, author, img, id }) {
               {productData.title}
             </h2>
             <p className="text-xs text-gray-600">{productData.author}</p>
-            <p className="text-sm text-slate-700 font-bold">
-              ${productData.price}
-            </p>
+            <p className="text-sm text-slate-700 font-bold">${productData.price}</p>
           </div>
         </Link>
+
         {role === "admin" && (
           <div className="flex justify-evenly items-center mt-2">
             <button
@@ -59,7 +71,13 @@ function ProductsCard({ title, price, author, img, id }) {
             >
               Edit
             </button>
-            <button className="rounded border px-2 py-1 w-[100px] hover:bg-red-100 text-red-600">
+            <button
+              onClick={() => {
+                setDeleteError("");
+                setShowDeletePopup(true);
+              }}
+              className="rounded border px-2 py-1 w-[100px] hover:bg-red-100 text-red-600"
+            >
               Delete
             </button>
           </div>
@@ -71,6 +89,15 @@ function ProductsCard({ title, price, author, img, id }) {
           productId={id}
           onCancel={() => setShowEdit(false)}
           onProductUpdated={handleProductUpdate}
+        />
+      )}
+
+      {showDeletePopup && (
+        <DeletePopup
+          onCancel={() => setShowDeletePopup(false)}
+          onConfirm={handleDelete}
+          errorMessage={deleteError}
+          title="product"
         />
       )}
     </>
