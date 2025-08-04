@@ -47,3 +47,22 @@ export async function addCategory(prevState, formData) {
     return { error: message };
   }
 }
+
+export async function deleteCategory(id) {
+  try {
+    const res = await axios.delete(`${BASE_URL}/categories/${id}`, {
+      withCredentials: true,
+    });
+
+    if (res.status === 200) {
+      return { success: true };
+    } else {
+      return { success: false, message: res.data?.message || "Failed" };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error?.response?.data?.message || "Error deleting category",
+    };
+  }
+}

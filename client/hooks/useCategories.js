@@ -18,8 +18,6 @@ function useCategories() {
       return false;
     }
 
-    // const result = await addCategory(newCategoryTitle.trim());
-
     if (result.success) {
       setNewCategoryTitle("");
       setAddingCategory(false);

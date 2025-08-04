@@ -1,7 +1,7 @@
 import axios from "axios";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export async function addProduct(prevState, formData){
+export async function addProduct(prevState, formData) {
   const data = {
     name: formData.get("name"),
     author: formData.get("author"),
@@ -22,16 +22,15 @@ export async function addProduct(prevState, formData){
       data: res.data.data,
     };
   } catch (error) {
-    console.log("error?.response?.data?.message", error?.response.data.message);
     return {
       success: false,
       message: error?.response?.data?.message || "Failed to add product",
       fieldData: data,
     };
   }
-};
+}
 
-export async function fetchAllProducts (page = 1, limit = 10){
+export async function fetchAllProducts(page = 1, limit = 10) {
   try {
     const response = await axios.get(`${BASE_URL}/products`, {
       params: { page, limit },
@@ -49,9 +48,9 @@ export async function fetchAllProducts (page = 1, limit = 10){
       message: error?.response?.data?.message || "Failed to fetch products",
     };
   }
-};
+}
 
-export async function fetchSingleProduct(id){
+export async function fetchSingleProduct(id) {
   try {
     const { data } = await axios.get(`${BASE_URL}/products/${id}`);
 
@@ -67,9 +66,9 @@ export async function fetchSingleProduct(id){
       message: error?.response?.data?.message || "Failed to fetch product",
     };
   }
-};
+}
 
-export async function editProduct(prevState, formData, id){
+export async function editProduct(prevState, formData, id) {
   const data = {
     name: formData.get("name"),
     author: formData.get("author"),
@@ -100,13 +99,13 @@ export async function editProduct(prevState, formData, id){
       fieldData: data,
     };
   }
-};
+}
 
 export async function fetchProductsByCategory(
   categoryId,
   page = 1,
   limit = 10
-){
+) {
   try {
     const response = await axios.get(
       `${BASE_URL}/products/category/${categoryId}`,
@@ -114,7 +113,6 @@ export async function fetchProductsByCategory(
         params: { page, limit },
       }
     );
-    console.log("response.data", response.data.categoryName);
     return {
       success: true,
       message: response.data.message,
@@ -130,4 +128,28 @@ export async function fetchProductsByCategory(
         "Failed to fetch products by category",
     };
   }
-};
+}
+
+export async function softDeleteProduct(id) {
+  try {
+    const res = await axios.put(
+      `${BASE_URL}/products/soft-delete/${id}`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    if (res.status === 200) {
+      return { success: true, message: res.data.message };
+    } else {
+      return { error: res.data.error || "Failed to delete product" };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error?.response?.data?.message ||
+        "Failed to fetch products by category",
+    };
+  }
+}
