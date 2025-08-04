@@ -24,20 +24,20 @@ function Stats() {
     loadStats();
   }, []);
 
-  if (loading) return <div className="min-h-[100px] flex items-center">Loading...</div>;
+  if (loading) return <div className=" flex min-h-[80vh]">Loading...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
-    <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div className="bg-white shadow-md rounded-xl p-4 text-center">
+    <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 min-h-[80vh]">
+      <div className="bg-white h-fit shadow-md rounded-xl p-4 text-center">
         <h2 className="text-xl font-semibold">Total Products</h2>
         <p className="text-3xl mt-2 text-blue-600">{stats.totalProducts}</p>
       </div>
-      <div className="bg-white shadow-md rounded-xl p-4 text-center">
+      <div className="bg-white h-fit shadow-md rounded-xl p-4 text-center">
         <h2 className="text-xl font-semibold">Total Categories</h2>
         <p className="text-3xl mt-2 text-green-600">{stats.totalCategories}</p>
       </div>
-      <div className="bg-white shadow-md rounded-xl p-4 text-center">
+      <div className="bg-white h-fit shadow-md rounded-xl p-4 text-center">
         <h2 className="text-xl font-semibold">Total Inventory</h2>
         <p className="text-3xl mt-2 text-purple-600">{stats.totalInventory}</p>
       </div>

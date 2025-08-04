@@ -48,7 +48,7 @@ function ProductsPerCategory() {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-6 min-h-screen w-full">
+    <div className="flex flex-col gap-6 p-6  w-full">
       <div className="flex justify-between items-center w-full">
         <h1 className="title">{categoryName}</h1>
       </div>

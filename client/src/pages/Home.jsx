@@ -44,7 +44,7 @@ function Home() {
   };
 
   return (
-    <div className="flex w-full min-h-screen flex-col gap-6 p-6">
+    <div className="flex w-full  flex-col gap-6 p-6">
       <div className="flex justify-between w-full items-center">
         <h1 className="title">All Books</h1>
         {role === "admin" && (
@@ -56,7 +56,7 @@ function Home() {
 
       <div
         style={{ minHeight: "500px" }}
-        className="flex w-full min-h-screen lg:justify-start justify-center flex-wrap gap-6"
+        className="flex w-full  lg:justify-start justify-center flex-wrap gap-6"
       >
         {loading ? (
           <p>Loading products...</p>

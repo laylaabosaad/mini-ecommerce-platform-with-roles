@@ -22,11 +22,11 @@ function SingleProduct() {
 
     fetchProduct();
   }, [id]);
-  if (loading) return <p className="text-center py-10">Loading...</p>;
+  if (loading) return <p className="text-center py-10 min-h-[80vh]">Loading...</p>;
   if (!product) return <p className="text-center py-10">Product not found.</p>;
 
   return (
-    <div className="w-full px-4 py-10 flex flex-col lg:flex-row lg:items-start items-center justify-center gap-8 lg:gap-12">
+    <div className="w-full min-h-screen px-4 py-10 flex flex-col lg:flex-row lg:items-start items-center justify-center gap-8 lg:gap-12">
       <div className="w-full lg:w-1/4 flex justify-center lg:justify-end">
         <img
           className="w-60 h-auto lg:w-full object-contain rounded-lg shadow-md"

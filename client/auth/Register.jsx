@@ -7,8 +7,8 @@ function Register() {
   const [state, action, isPending] = useActionState(register, undefined);
 
   return (
-    <div className="flex justify-center items-center  bg-gray-100">
-      <div className="bg-white mt-5 py-5 px-8 rounded shadow-md w-full max-w-md">
+   <div className="flex justify-center  mt-20  min-h-[80vh]  bg-gray-100">
+      <div className="bg-white py-5 px-8 rounded shadow-md h-fit w-full max-w-md">
         <h1 className="title text-center">Register</h1>
         <form action={action} className="flex flex-col">
           <Inputs
