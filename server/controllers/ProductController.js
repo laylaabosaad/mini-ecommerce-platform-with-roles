@@ -205,10 +205,7 @@ export async function getProductsByCategoryId(req, res) {
     const filter = { category: categoryId, isDeleted: false };
 
     const [products, totalProducts, category] = await Promise.all([
-      ProductModel.find(filter)
-        .skip(skip)
-        .limit(limit)
-        .lean(),
+      ProductModel.find(filter).skip(skip).limit(limit).lean(),
       ProductModel.countDocuments(filter),
       CategoryModel.findById(categoryId).lean(),
     ]);
@@ -236,7 +233,6 @@ export async function getProductsByCategoryId(req, res) {
     });
   }
 }
-
 
 export async function getDashboardStats(req, res) {
   try {
@@ -267,3 +263,36 @@ export async function getDashboardStats(req, res) {
     });
   }
 }
+
+export async function search(req, res) {
+  try {
+    const searchedName = req.query.searchedName;
+
+    if (!searchedName || !searchedName.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Search query (searchedName) is required",
+      });
+    }
+
+    const regex = new RegExp(searchedName.trim(), "i");
+
+    const products = await ProductModel.find({
+      isDeleted: false,
+      $or: [{ name: regex }, { author: regex }],
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: { products },
+      message: `Found ${products.length} products matching "${searchedName.trim()}" in name or author`,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Search failed",
+      error: error.message,
+    });
+  }
+}
+

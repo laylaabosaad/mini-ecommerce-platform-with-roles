@@ -11,12 +11,4 @@ UserRoute.get("/verify-logged-token", verifyToken, (req, res) => {
   res.json({ user: req.user });
 });
 
-UserRoute.get(
-  "/verify-protected",
-  verifyToken,
-  authorizeRoles("admin"),
-  (req, res) => {
-    return res.json({ user: req.user });
-  }
-);
 export default UserRoute;

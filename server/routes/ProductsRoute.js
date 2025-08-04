@@ -5,6 +5,7 @@ import {
   getAllProducts,
   getProductsByCategoryId,
   getSingleProduct,
+  search,
   softDeleteProduct,
   updateProduct,
 } from "../controllers/ProductController.js";
@@ -14,6 +15,7 @@ const ProductRoute = express.Router();
 ProductRoute.post("/", verifyToken, authorizeRoles("admin"), addProduct);
 ProductRoute.delete("/", verifyToken, authorizeRoles("admin"), deleteProduct);
 ProductRoute.get("/", getAllProducts);
+ProductRoute.get("/search", search);
 ProductRoute.get("/:id", getSingleProduct);
 ProductRoute.put("/:id", verifyToken, authorizeRoles("admin"), updateProduct);
 ProductRoute.put(
